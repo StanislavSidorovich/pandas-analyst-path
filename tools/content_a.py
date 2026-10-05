@@ -34,11 +34,13 @@ def intro(b, colab_url):
     | ✅ `check("id")` | tells you right/wrong **and why**, and recognises typical mistakes |
     | 🏁 **Checkpoint** | a business question that mixes the part's skills. Answer in code **and in words** |
 
-    **When you are stuck, climb the ladder (no AI needed):**
+    **When you are stuck, climb the ladder (no AI needed).** Add a new cell (**+ Code**) right under the `check` cell and run:
     1. Re-read the 📘 concept and the 🔍 example right above.
-    2. `hint("3.2")`: a nudge. Call it again for a stronger hint.
-    3. `compare("3.2")`: your result next to the expected one (first rows).
-    4. `solution("3.2")`: read it, **close it, retype it from memory**, run `check` again.
+    2. `hint()`: a nudge. Run it again for a stronger hint.
+    3. `compare()`: your result next to the expected one (first rows).
+    4. `solution()`: read it, **close it, retype it from memory**, run `check` again.
+
+    No task number needed: these always refer to **the task you checked last**. (`hint("3.2")` works too, for any task.)
 
     `progress()` shows your score per part. The ✅ outputs stay in your saved copy as a record.
 

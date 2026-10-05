@@ -12,6 +12,7 @@ from IPython.display import display as _display, Markdown as _Markdown
 _P = _json.loads(_zlib.decompress(_b64.b64decode(_PAYLOAD)).decode("utf-8"))
 _TASKS, _PARTS = _P["tasks"], _P["parts"]
 _PASSED, _HINT_LEVEL, _REF_VALUES, _NS_CACHE = set(), {}, {}, {}
+_LAST = {"id": None}   # the task checked most recently: hint()/compare()/solution() default to it
 
 
 def fresh_data():
@@ -350,6 +351,7 @@ def check(task_id):
     t = _get(task_id)
     if t is None:
         return
+    _LAST["id"] = t["id"]
     g = globals()
     try:
         u = eval(t["var"], g)
@@ -408,7 +410,7 @@ def check(task_id):
             pass
     if t.get("needs"):
         print(f"   ↪ This task builds on {', '.join(t['needs'])}. Make sure those pass first.")
-    print(f"   Next step (type it in a new cell: + Code): hint('{t['id']}')  ·  compare('{t['id']}')  ·  solution('{t['id']}')")
+    print(f"   Stuck? In a new cell (+ Code) run  hint()  ·  then compare()  ·  then solution()   (they refer to task {t['id']})")
 
 
 def _prev_block(tid):
@@ -418,6 +420,11 @@ def _prev_block(tid):
 
 
 def _get(task_id):
+    if task_id is None:
+        task_id = _LAST["id"]
+        if task_id is None:
+            print("⚠️ Run a check(...) cell first. hint() then knows which task you mean. Or name it: hint('1.3').")
+            return None
     if not isinstance(task_id, str):
         print(f"⚠️ Put the task id in quotes: check('{task_id}'). Without quotes 3.10 and 3.1 look the same.")
     t = _TASKS.get(str(task_id))
@@ -426,7 +433,7 @@ def _get(task_id):
     return t
 
 
-def hint(task_id):
+def hint(task_id=None):
     """Show the next hint for a task. Call again for a stronger hint."""
     t = _get(task_id)
     if t is None:
@@ -437,12 +444,12 @@ def hint(task_id):
         print(f"💡 Hint {k + 1}/{len(hints)} for task {t['id']}:\n   {hints[k]}")
         _HINT_LEVEL[t["id"]] = k + 1
         if k + 1 < len(hints):
-            print(f"   (run hint('{t['id']}') again for a stronger hint)")
+            print("   (run hint() again for a stronger hint)")
     else:
-        print(f"No more hints. Look at the solution: solution('{t['id']}') — then close it and retype it yourself.")
+        print("No more hints. Look at the solution: solution() — then close it and retype it yourself.")
 
 
-def solution(task_id):
+def solution(task_id=None):
     """Print the reference solution. Read it, close it, then retype it from memory."""
     t = _get(task_id)
     if t is None:
@@ -454,7 +461,7 @@ def solution(task_id):
     print("\n✍️  Now retype it yourself in your cell (don't copy-paste) and run check() again.")
 
 
-def compare(task_id, n=5):
+def compare(task_id=None, n=5):
     """Show the start of YOUR result next to the EXPECTED one."""
     t = _get(task_id)
     if t is None:
@@ -475,7 +482,7 @@ def compare(task_id, n=5):
             print("  ", v if not isinstance(v, (list, np.ndarray, pd.Index)) else list(v)[:n * 2])
 
 
-def show_me(task_id):
+def show_me(task_id=None):
     """Draw the reference chart for a plotting task."""
     t = _get(task_id)
     if t is None:

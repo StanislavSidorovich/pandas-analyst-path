@@ -71,7 +71,7 @@ users, products, orders, order_items, sessions = fresh_data()
 print(f"✅ Setup done · data: {_source} · TODAY = {TODAY.date()} · pandas {pd.__version__}")
 for _t in _TABLES:
     print(f"   {_t:12s} {len(_BASE[_t]):>9,} rows")
-print("Helpers: check('id') · hint('id') · compare('id') · solution('id') · show_me('id') · progress() · reset_data()")
+print("Helpers: check('1.3') · then, for the task you checked last: hint() · compare() · solution() · show_me() · and progress() · reset_data()")
 '''
 
 
@@ -86,9 +86,9 @@ def build():
     b.md("""
     ### Try the checker once (this is how every task works)
     1. Run the `check("0.1")` cell below **before** writing anything. You'll see ❌. That's expected: `n_users` doesn't exist yet.
-    2. Run the ready-made `hint("0.1")` cell under it. Run it **again** for a stronger hint.
-       For later tasks there is no ready-made hint cell. Add one yourself (**+ Code**, see *Colab basics*) or temporarily
-       replace `check` with `hint` in the check cell.
+    2. Run the ready-made `hint()` cell under it. Run it **again** for a stronger hint.
+       `hint()`, `compare()` and `solution()` always refer to **the task you checked last**, so you never type task numbers.
+       Later tasks have no ready-made hint cell: add one with **+ Code** (see *Colab basics*) and type `hint()`.
     3. Write your code in the `# Task 0.1` cell, **run it** (Shift+Enter), then run `check("0.1")` again → ✅.
     """)
     b.task("0.1", "How many customers?", """
@@ -96,7 +96,7 @@ def build():
         """, "n_users", "n_users = len(users)",
         ["`len(df)` gives the number of rows.", "`n_users = len(users)`"], level=1,
         takeaway="That's the whole loop: write → run → check → (hint) → fix. Now go to Part 1.")
-    b.code('hint("0.1")   # ← run me after the ❌ above. Run me again for a stronger hint.')
+    b.code('hint()   # ← run me after the ❌ above. Run me again for a stronger hint.')
     for part in (content_a.part1, content_a.part2, content_a.part3, content_a.part4,
                  content_b.part5, content_b.part6, content_b.part7, content_b.part8,
                  content_c.part9, content_c.part10, content_c.part11, content_c.part12, content_c.appendix):

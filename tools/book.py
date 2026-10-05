@@ -65,7 +65,7 @@ class Book:
         self.cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
                            "source": _src(learner), "_solution": f"# Task {tid}\n" + solution})
         self.cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
-                           "source": _src(f'check("{tid}")   # stuck? hint("{tid}") · compare("{tid}") · solution("{tid}")')})
+                           "source": _src(f'check("{tid}")   # stuck? run hint() in a new cell, then compare(), then solution()')})
 
     # ---------------------------------------------------------------- output
     def payload(self):
