@@ -359,7 +359,7 @@ def check(task_id):
             print(f"❌ `{missing}` doesn't exist in this session. Run the ▶ {t['part']} setup cell "
                   f"(and the tasks before this one), then your solution, then check again.")
         else:
-            print(f"❌ I can't find `{t['var']}` yet.\n   1) Did you run your solution cell?  "
+            print(f"❌ I can't find `{t['var']}` yet.\n   1) Did you RUN your solution cell (▶ or Shift+Enter)?  "
                   f"2) Is it named exactly `{t['var']}`?")
         return
     except KeyError as e:
@@ -408,7 +408,7 @@ def check(task_id):
             pass
     if t.get("needs"):
         print(f"   ↪ This task builds on {', '.join(t['needs'])}. Make sure those pass first.")
-    print(f"   Next step: hint('{t['id']}')  ·  compare('{t['id']}')  ·  solution('{t['id']}')")
+    print(f"   Next step (type it in a new cell: + Code): hint('{t['id']}')  ·  compare('{t['id']}')  ·  solution('{t['id']}')")
 
 
 def _prev_block(tid):

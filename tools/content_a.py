@@ -90,6 +90,18 @@ def intro(b, colab_url):
     - **Colab forgets variables** when you close the tab or after ~90 min idle. Then: run **⚙️ Setup**, then the
       **▶ Part setup** cell of the part you're in. Every part can start in a fresh session.
     - Phone: fine for reading, examples and short tasks. Tablet + keyboard: fine for everything.
+
+    ### Colab basics in 60 seconds
+    | To… | Do this |
+    |---|---|
+    | run a cell | click ▶ on its left, or click inside it and press **Shift+Enter** |
+    | know if a cell has run | `[ ]` = never run · `[5]` = ran (5th run) · spinning circle = running |
+    | add your own cell (e.g. for `hint(...)`) | hover between two cells → **+ Code**, or the **+ Code** button at the top (inserts below the selected cell) |
+    | jump to a part | **Table of contents** (☰ icon on the left) |
+    | undo a deleted cell | **Edit → Undo** (Ctrl+Z / ⌘Z outside the cell) |
+
+    ⚠️ **Writing code is not enough. The cell must be run.** Until you run it, Python doesn't know your variable, and `check` says
+    "I can't find …". Order for every task: **write → run your cell → run the `check` cell under it.**
     """)
 
 

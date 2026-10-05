@@ -84,16 +84,19 @@ def build():
     """)
     content_a.meet_data(b)
     b.md("""
-    ### Try the checker once
-    1. Run the `check` cell below **before** writing anything and read the message.
-    2. Run `hint("0.1")` in a new cell.
-    3. Solve it and run `check` again.
+    ### Try the checker once (this is how every task works)
+    1. Run the `check("0.1")` cell below **before** writing anything. You'll see ❌. That's expected: `n_users` doesn't exist yet.
+    2. Run the ready-made `hint("0.1")` cell under it. Run it **again** for a stronger hint.
+       For later tasks there is no ready-made hint cell. Add one yourself (**+ Code**, see *Colab basics*) or temporarily
+       replace `check` with `hint` in the check cell.
+    3. Write your code in the `# Task 0.1` cell, **run it** (Shift+Enter), then run `check("0.1")` again → ✅.
     """)
     b.task("0.1", "How many customers?", """
         Store the number of rows of `users` in a variable called `n_users`.
         """, "n_users", "n_users = len(users)",
         ["`len(df)` gives the number of rows.", "`n_users = len(users)`"], level=1,
-        takeaway="That's the whole loop: write → check → (hint) → fix. Now go to Part 1.")
+        takeaway="That's the whole loop: write → run → check → (hint) → fix. Now go to Part 1.")
+    b.code('hint("0.1")   # ← run me after the ❌ above. Run me again for a stronger hint.')
     for part in (content_a.part1, content_a.part2, content_a.part3, content_a.part4,
                  content_b.part5, content_b.part6, content_b.part7, content_b.part8,
                  content_c.part9, content_c.part10, content_c.part11, content_c.part12, content_c.appendix):
