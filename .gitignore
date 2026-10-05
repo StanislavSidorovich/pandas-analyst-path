@@ -1,0 +1,5 @@
+build/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+/crm_signups_export.csv
