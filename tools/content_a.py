@@ -270,6 +270,14 @@ def part1(b):
     | `s.value_counts().idxmax()` | the most frequent value (also `.index[0]`) |
 
     💡 A boolean trick you'll use daily: `(s == "X").mean()` = **share of rows where s is X** (True=1, False=0).
+
+    🧩 **A Series has two parts.** The result of `value_counts()` looks like a two-column table, but it is a Series:
+    - the left column is the **index**: the *labels* (here: the traffic sources) → `.index`
+    - the right column is the **values**: the *counts* → `.values`
+
+    So "which ones?" questions (names, top 3, the biggest) are answered by the **index**, and "how many?" questions by
+    the **values**. `.head(3)` keeps the first 3 rows, `.index` takes their labels, `list(...)` makes them a plain list
+    (same trick as `list(products.columns)` in 1.2).
     """)
     b.code("""
     # 🔍 How do customers find us?
@@ -277,6 +285,13 @@ def part1(b):
     print()
     print(users["traffic_source"].value_counts(normalize=True).round(3))
     print("Share from Search:", (users["traffic_source"] == "Search").mean())
+    """)
+    b.code("""
+    # 🔍 Labels vs counts: the two parts of a value_counts() result
+    vc = users["traffic_source"].value_counts()
+    print("index  (labels):", list(vc.index))
+    print("values (counts):", list(vc.values))
+    print("most frequent label:", vc.index[0], "| its count:", vc.iloc[0])
     """)
     b.task("1.7", "How many countries?", """
         How many **distinct** countries appear in `users`?
@@ -341,8 +356,14 @@ def part1(b):
     b.task("1.C1", "Top 3 countries", """
         A **list** with the names of the 3 countries with the most users, biggest first.
         """, "top3_countries", "top3_countries = list(users['country'].value_counts().head(3).index)",
-        ["`value_counts()` → `.head(3)` → the labels live in the `.index`.",
-         "`list(users['country'].value_counts().head(3).index)`"], cmp={"ordered": True})
+        ["You already have both pieces. 1.10: `value_counts()` is sorted biggest first, and the **names** sit in its "
+         "`.index` (the counts are the values). 1.2: `list(...)` turns an Index into a plain Python list. "
+         "No row filtering is needed here.",
+         "Count countries with `value_counts()`, keep the first 3 rows with `.head(3)`, take their labels with `.index`, "
+         "wrap it all in `list(...)`.",
+         "`list(users['country'].value_counts().head(3).index)`"], cmp={"ordered": True},
+        traps=[("top3_countries = users['country'].value_counts().head(3)",
+                "that's a Series: country → **count**. You need only the names: take its `.index` and wrap it in `list(...)`.")])
     b.task("1.C2", "Share of Search", """
         The share of users (0–1) whose `traffic_source` is `"Search"`.
         """, "search_share", "search_share = (users['traffic_source'] == 'Search').mean()",
