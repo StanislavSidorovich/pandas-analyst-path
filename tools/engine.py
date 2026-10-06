@@ -2,7 +2,7 @@
 # Checker engine. Inlined into the notebook's hidden Setup cell by build_notebook.py.
 # Expects these globals to exist before it runs: _PAYLOAD (base64 zlib JSON), _BASE (dict of
 # pristine DataFrames), TODAY, CRM_PATH, pd, np, plt, sns.
-# Public helpers: check(id), hint(id), solution(id), compare(id), show_me(id), progress()
+# Public helpers: check(id), hint(id), solution(id), compare(id), show_me(id), cheat(), progress()
 # ---------------------------------------------------------------------------
 import io as _io
 from contextlib import redirect_stdout as _redirect
@@ -10,7 +10,7 @@ import base64 as _b64, json as _json, zlib as _zlib, math as _math, copy as _cop
 from IPython.display import display as _display, Markdown as _Markdown
 
 _P = _json.loads(_zlib.decompress(_b64.b64decode(_PAYLOAD)).decode("utf-8"))
-_TASKS, _PARTS = _P["tasks"], _P["parts"]
+_TASKS, _PARTS, _SECTIONS = _P["tasks"], _P["parts"], _P["sections"]
 _PASSED, _HINT_LEVEL, _REF_VALUES, _NS_CACHE = set(), {}, {}, {}
 _LAST = {"id": None, "via": None}   # task of the last run task cell or check(): hint()/compare()/solution() default to it
 
@@ -429,7 +429,7 @@ def check(task_id):
             pass
     if t.get("needs"):
         print(f"   ↪ This task builds on {', '.join(t['needs'])}. Make sure those pass first.")
-    print(f"   Stuck? In a new cell (+ Code) run  hint()  ·  then compare()  ·  then solution()   (they refer to task {t['id']})")
+    print(f"   Stuck? In a new cell (+ Code) run  cheat()  ·  hint()  ·  then compare()  ·  then solution()   (they refer to task {t['id']})")
 
 
 def _prev_block(tid):
@@ -516,6 +516,94 @@ def show_me(task_id=None):
         return
     _run_part_until(t["part"], t["id"], run_plot=True)
     plt.show()
+
+
+def _cheat_show(sids, note=""):
+    md = [note] if note else []
+    for sid in sids:
+        sec = _SECTIONS[sid]
+        md.append(f"#### 📋 {sid} {sec['title']}\n\n{sec['md']}")
+    _display(_Markdown("\n\n---\n\n".join(md)))
+
+
+def _cheat_for_task(t):
+    sid = t.get("section")
+    if sid and _SECTIONS[sid]["md"] and not sid.startswith("A."):
+        return [sid], f"*Cheat sheet for task {t['id']}* (section {sid} of the lesson)"
+    part = [k for k, v in _SECTIONS.items() if v["part"] == t["part"] and v["md"] and not k.startswith("A.")]
+    if part and not sid:                     # a checkpoint mixes the whole part
+        return part, f"*Cheat sheet for task {t['id']}*: a checkpoint, so everything from {t['part']}"
+    return ["A.2"], f"*Cheat sheet for task {t['id']}*: it mixes several parts, so here is the full cheat sheet"
+
+
+def _cheat_items(md):
+    """Split a cheat block into (table header or None, item): one table row, one bullet or one paragraph each."""
+    lines, items, header, buf = md.split("\n"), [], None, []
+
+    def flush():
+        if buf:
+            items.append((None, " ".join(x.strip() for x in buf)))
+            buf.clear()
+    for i, line in enumerate(lines):
+        s = line.strip().lstrip("- ").strip() if line.strip().startswith("- |") else line.strip()
+        if s.startswith("|"):
+            flush()
+            if i + 1 < len(lines) and lines[i + 1].strip().lstrip("- ").startswith("|--"):
+                header = s + "\n" + lines[i + 1].strip().lstrip("- ")
+            elif not s.startswith("|--"):
+                items.append((header, s))
+        elif not s:
+            flush()
+        elif s.startswith("- ") or s[:2] in ("💡", "⚠️", "📘", "🧩"):
+            flush()
+            buf.append(s)
+        else:
+            buf.append(s)
+    flush()
+    return items
+
+
+def _cheat_search(word):
+    w, out = word.lower(), []
+    for sid, sec in _SECTIONS.items():
+        hits = [(h, it) for h, it in _cheat_items(sec["md"]) if w in it.lower()]
+        if hits:
+            block, last = [], object()
+            for h, it in hits:
+                if h != last:
+                    block.append("\n" + h if h else "")
+                    last = h
+                block.append(it if it.startswith(("|", "- ")) else "- " + it)
+            out.append(f"#### 📋 {sid} {sec['title']}\n" + "\n".join(block))
+    return out
+
+
+def cheat(what=None):
+    """The 📘 cheat sheet right here: cheat() for the task you ran/checked last, cheat('merge') to search,
+    cheat('3.2') for a section, cheat('Part 3') for a whole part, cheat('all') for the full table."""
+    if what is None:
+        t = _get(None)
+        if t is None:
+            return
+        sids, note = _cheat_for_task(t)
+        return _cheat_show(sids, note)
+    key = str(what).strip()
+    if key.lower() == "all":
+        return _cheat_show(["A.2", "A.3"])
+    if key in _SECTIONS:
+        return _cheat_show([key])
+    if key in _TASKS:
+        return _cheat_show(*_cheat_for_task(_TASKS[key]))
+    part = key if key.lower().startswith("part") else f"Part {key}"
+    part = next((p for p in _PARTS if p.lower() == part.lower()), None)
+    if part:
+        return _cheat_show([k for k, v in _SECTIONS.items() if v["part"] == part and v["md"]])
+    found = _cheat_search(key)
+    if not found:
+        print(f"Nothing about {key!r} in the cheat sheets. Try a shorter word ('merge', 'date', 'NaN'), "
+              "or cheat('all') for the full table.")
+        return
+    _display(_Markdown(f"*Lines mentioning* `{key}`:\n\n" + "\n\n".join(found)))
 
 
 def progress():

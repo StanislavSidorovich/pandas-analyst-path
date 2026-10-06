@@ -1,6 +1,7 @@
 """Tiny framework that turns lesson content into a Colab notebook + hidden checker payload."""
 import base64
 import json
+import re
 import textwrap
 import zlib
 
@@ -19,10 +20,31 @@ class Book:
         self.tasks = {}
         self.parts = {}
         self.cur = None
+        self.sections = {}      # "1.3" → {"part", "title", "md"}: the 📘 block cheat() shows
+        self.cur_section = None  # section of the tasks that follow; None inside a checkpoint → whole part
 
     # ---------------------------------------------------------------- cells
     def md(self, text):
         self.cells.append({"cell_type": "markdown", "metadata": {}, "source": _src(text)})
+        self._sections_from(textwrap.dedent(text).strip("\n"))
+
+    def _sections_from(self, text):
+        """Record every '## X.Y Title' block of a markdown cell for cheat(); its 📘 part if it has one."""
+        for chunk in re.split(r"(?m)^(?=## )", text):
+            if not chunk.startswith("## "):
+                continue
+            head, _, body = chunk.partition("\n")
+            m = re.match(r"## (?:\S+ )?([0-9A]+\.\d+) (.+)", head)
+            if not m:                       # '## 🏁 Checkpoint …', intro headings: no single section
+                self.cur_section = None
+                continue
+            sid, title = m.groups()
+            if "📘" in body:
+                body = body[body.index("📘"):]
+            else:                           # no 📘 block: keep everything except the 🎯 Why paragraph
+                body = "\n\n".join(p for p in body.split("\n\n") if not p.strip().startswith("🎯"))
+            self.sections[sid] = {"part": self.cur, "title": title.strip(), "md": body.strip()}
+            self.cur_section = sid
 
     def code(self, src, ctx=False, hidden=False, solution_only=False):
         """ctx=True: the code also runs inside the checker (it creates state later tasks rely on)."""
@@ -38,6 +60,7 @@ class Book:
     # ---------------------------------------------------------------- structure
     def part(self, key, title, setup):
         self.cur = key
+        self.cur_section = None
         self.parts[key] = []
         self.md(f"# {key}. {title}")
         setup = textwrap.dedent(setup).strip()
@@ -55,7 +78,7 @@ class Book:
             "id": tid, "part": self.cur, "title": title, "var": var, "solution": solution,
             "hints": list(hints), "traps": [[textwrap.dedent(c).strip(), m] for c, m in traps], "cmp": cmp or {},
             "custom": textwrap.dedent(custom).strip() if custom else None, "plot": plot,
-            "takeaway": takeaway, "why": why, "needs": needs,
+            "takeaway": takeaway, "why": why, "needs": needs, "section": self.cur_section,
         }
         self.parts[self.cur].append({"kind": "task", "id": tid, "code": solution, "plot": bool(plot)})
         self.md(f"#### ✍️ Task {tid} · {LEVEL[level]} · {title}\n\n" + textwrap.dedent(prompt).strip()
@@ -65,11 +88,11 @@ class Book:
         self.cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
                            "source": _src(learner), "_solution": f"# Task {tid}\n" + solution})
         self.cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
-                           "source": _src(f'check("{tid}")   # stuck? run hint() in a new cell, then compare(), then solution()')})
+                           "source": _src(f'check("{tid}")   # stuck? in a new cell: cheat() → hint() → compare() → solution()')})
 
     # ---------------------------------------------------------------- output
     def payload(self):
-        raw = json.dumps({"tasks": self.tasks, "parts": self.parts}, ensure_ascii=False).encode("utf-8")
+        raw = json.dumps({"tasks": self.tasks, "parts": self.parts, "sections": self.sections}, ensure_ascii=False).encode("utf-8")
         return base64.b64encode(zlib.compress(raw, 9)).decode("ascii")
 
     def notebook(self, with_solutions=False):
