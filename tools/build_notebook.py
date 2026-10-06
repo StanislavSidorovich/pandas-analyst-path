@@ -71,7 +71,7 @@ users, products, orders, order_items, sessions = fresh_data()
 print(f"✅ Setup done · data: {_source} · TODAY = {TODAY.date()} · pandas {pd.__version__}")
 for _t in _TABLES:
     print(f"   {_t:12s} {len(_BASE[_t]):>9,} rows")
-print("Helpers: check('1.3') · then, for the task you checked last: hint() · compare() · solution() · show_me() · and progress() · reset_data()")
+print("Helpers: check('1.3') · then, for the task you ran or checked last: hint() · compare() · solution() · show_me() · and progress() · reset_data()")
 '''
 
 

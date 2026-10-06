@@ -12,7 +12,26 @@ from IPython.display import display as _display, Markdown as _Markdown
 _P = _json.loads(_zlib.decompress(_b64.b64decode(_PAYLOAD)).decode("utf-8"))
 _TASKS, _PARTS = _P["tasks"], _P["parts"]
 _PASSED, _HINT_LEVEL, _REF_VALUES, _NS_CACHE = set(), {}, {}, {}
-_LAST = {"id": None}   # the task checked most recently: hint()/compare()/solution() default to it
+_LAST = {"id": None, "via": None}   # task of the last run task cell or check(): hint()/compare()/solution() default to it
+
+
+def _track_task_cell(result):
+    """After every cell: if it was a '# Task X.Y' cell, remember that task (check() records its own)."""
+    import re
+    src = getattr(getattr(result, "info", None), "raw_cell", "") or ""
+    m = re.match(r"\s*#\s*Task\s+([A-Za-z0-9.]+)", src)
+    if m and m.group(1) in _TASKS:
+        _LAST["id"], _LAST["via"] = m.group(1), "cell"
+
+
+try:
+    _ev = get_ipython().events
+    for _cb in list(_ev.callbacks.get("post_run_cell", [])):   # Setup may be re-run: keep one hook
+        if getattr(_cb, "__name__", "") == "_track_task_cell":
+            _ev.unregister("post_run_cell", _cb)
+    _ev.register("post_run_cell", _track_task_cell)
+except Exception:
+    pass
 
 
 def fresh_data():
@@ -351,7 +370,7 @@ def check(task_id):
     t = _get(task_id)
     if t is None:
         return
-    _LAST["id"] = t["id"]
+    _LAST["id"], _LAST["via"] = t["id"], "check"
     g = globals()
     try:
         u = eval(t["var"], g)
@@ -423,9 +442,10 @@ def _get(task_id):
     if task_id is None:
         task_id = _LAST["id"]
         if task_id is None:
-            print("⚠️ Run a check(...) cell first. hint() then knows which task you mean. Or name it: hint('1.3').")
+            print("⚠️ Run your task cell (or its check) first, then hint() knows which task you mean. "
+                  "Or name it: hint('1.3').")
             return None
-        if task_id in _PASSED:   # last checked task is done → the learner is stuck on the next one
+        if _LAST["via"] == "check" and task_id in _PASSED:   # last checked task is done → the learner is stuck on the next one
             ids = list(_TASKS)
             i = ids.index(task_id)
             if i + 1 < len(ids):
