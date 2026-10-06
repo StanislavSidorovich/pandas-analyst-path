@@ -518,11 +518,15 @@ def show_me(task_id=None):
     plt.show()
 
 
+_CHEAT_URL = "https://stanislavsidorovich.github.io/pandas-analyst-path/cheatsheet.html"
+
+
 def _cheat_show(sids, note=""):
     md = [note] if note else []
     for sid in sids:
         sec = _SECTIONS[sid]
         md.append(f"#### 📋 {sid} {sec['title']}\n\n{sec['md']}")
+    md.append(f"🌐 [The whole cheat sheet as a page]({_CHEAT_URL}) (with search): keep it open on a second screen or phone.")
     _display(_Markdown("\n\n---\n\n".join(md)))
 
 

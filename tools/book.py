@@ -20,6 +20,7 @@ class Book:
         self.tasks = {}
         self.parts = {}
         self.cur = None
+        self.part_titles = {}
         self.sections = {}      # "1.3" → {"part", "title", "md"}: the 📘 block cheat() shows
         self.cur_section = None  # section of the tasks that follow; None inside a checkpoint → whole part
 
@@ -60,6 +61,7 @@ class Book:
     # ---------------------------------------------------------------- structure
     def part(self, key, title, setup):
         self.cur = key
+        self.part_titles[key] = title
         self.cur_section = None
         self.parts[key] = []
         self.md(f"# {key}. {title}")

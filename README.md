@@ -65,4 +65,4 @@ datasets program. The snapshot keeps only non-personal columns (no names, emails
 Один ноутбук для Colab: от основ pandas до бизнес-задач аналитика (KPI, когорты, RFM, отток, воронка) и подготовки
 к экзамену по Data Mining. Открыть по кнопке → «Сохранить копию на Диске» → дальше работать в своей копии, в том числе
 с телефона или планшета. Данные грузятся без входа в Google. Для каждого задания есть проверка `check()`,
-шпаргалка к заданию `cheat()` (и поиск: `cheat("merge")`), подсказки `hint()`, сравнение `compare()` и решение `solution()`. Глоссарий EN→RU в конце ноутбука.
+шпаргалка к заданию `cheat()` (и поиск: `cheat("merge")`; она же [отдельной страницей](https://stanislavsidorovich.github.io/pandas-analyst-path/cheatsheet.html)), подсказки `hint()`, сравнение `compare()` и решение `solution()`. Глоссарий EN→RU в конце ноутбука.

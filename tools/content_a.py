@@ -44,6 +44,8 @@ def intro(b, colab_url):
 
     📋 `cheat()` also searches: `cheat("merge")`, `cheat("NaN")`, `cheat("KeyError")` show every line about it from all
     lessons. `cheat("Part 3")` shows one part, `cheat("all")` the full cheat sheet and error decoder.
+    🌐 The same as a web page with search, to keep open next to the notebook (second screen, phone):
+    **[📋 open the cheat sheet](https://stanislavsidorovich.github.io/pandas-analyst-path/cheatsheet.html)**
 
     `progress()` shows your score per part. The ✅ outputs stay in your saved copy as a record.
 

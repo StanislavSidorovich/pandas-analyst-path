@@ -123,6 +123,10 @@ def build():
 
 if __name__ == "__main__":
     b = build()
+    import build_cheatsheet
+    os.makedirs(os.path.join(ROOT, "docs"), exist_ok=True)
+    with open(os.path.join(ROOT, "docs", "cheatsheet.html"), "w", encoding="utf-8", newline="\n") as f:
+        f.write(build_cheatsheet.build_page(b.sections, b.part_titles))
     os.makedirs(os.path.join(ROOT, "build"), exist_ok=True)
     for path, sol in ((os.path.join(ROOT, NB_NAME), False),
                       (os.path.join(ROOT, "build", NB_NAME.replace(".ipynb", "_SOLUTIONS.ipynb")), True)):
