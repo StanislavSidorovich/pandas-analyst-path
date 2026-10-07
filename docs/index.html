@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pandas Analyst Path</title>
+<meta name="description" content="One Colab notebook from the first df.head() to business analytics with pandas: 137 auto-checked tasks on an e-commerce dataset.">
+<meta property="og:title" content="Pandas Analyst Path">
+<meta property="og:description" content="One Colab notebook, 137 auto-checked pandas tasks: from df.head() to cohorts, RFM and churn. Free, no login for the data.">
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e3e3e0;--code:#f0efe9;--accent:#2f6fde;--on-accent:#fff}
+@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1d1d20;--ink:#ececee;--muted:#a0a0a8;--line:#2e2e33;--code:#2a2a2f;--accent:#7aa7ff;--on-accent:#0b1530}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:32px 16px 48px}
+h1{font-size:28px;line-height:1.2;margin:0 0 10px}
+.lead{font-size:17px;color:var(--muted);margin:0 0 22px}
+.cta{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 30px}
+.btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:10px;padding:11px 18px;border:1px solid var(--line);color:var(--ink);background:var(--card)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+h2{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:28px 0 10px}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 18px 12px}
+ol,ul{margin:8px 0;padding-left:22px}
+li{margin:4px 0}
+code{font:14px/1.4 ui-monospace,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
+table{border-collapse:collapse;width:100%;font-size:15px}
+td{vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+td:first-child{color:var(--muted);white-space:nowrap;width:1%}
+a{color:var(--accent)}
+footer{margin-top:32px;font-size:14px;color:var(--muted)}
+footer a{color:inherit}
+</style></head>
+<body><div class="wrap">
+
+<h1>Pandas Analyst Path</h1>
+<p class="lead">One Colab notebook that takes you from the first <code>df.head()</code> to real business questions: KPIs, cohorts, RFM, churn, funnel. 137 small tasks, each auto-checked, and the checker explains <em>why</em> an answer is wrong.</p>
+
+<div class="cta">
+  <a class="btn primary" href="https://colab.research.google.com/github/StanislavSidorovich/pandas-analyst-path/blob/main/Pandas_Analyst_Path.ipynb">Open in Colab</a>
+  <a class="btn" href="cheatsheet.html">Cheat sheet</a>
+</div>
+
+<h2>How to start</h2>
+<section><ol>
+  <li>Open in Colab, then <strong>File → Save a copy in Drive</strong>. From now on work in your copy, on a laptop, tablet or phone.</li>
+  <li>Run the <strong>⚙️ Setup</strong> cell, then the <strong>▶ Part setup</strong> cell of the part you are on.</li>
+  <li>Solve a task and run its <code>check("1.1")</code> cell.</li>
+</ol>
+<p>No Google login is needed for the data: a snapshot of the dataset downloads automatically.</p></section>
+
+<h2>When you are stuck</h2>
+<section><p>Add a cell under the task (<strong>+ Code</strong>) and climb the ladder:</p>
+<ol>
+  <li><code>cheat()</code>: the concept table for this task</li>
+  <li><code>hint()</code>: a nudge; run it again for a stronger one</li>
+  <li><code>compare()</code>: your answer next to the expected one</li>
+  <li><code>solution()</code>: one possible solution, to retype yourself</li>
+</ol></section>
+
+<h2>What is inside</h2>
+<section><table>
+  <tr><td>0</td><td>How the notebook works · the data · SQL → pandas</td></tr>
+  <tr><td>1–2</td><td>First look, selecting, filtering</td></tr>
+  <tr><td>3–4</td><td>New columns, dates</td></tr>
+  <tr><td>5</td><td>Cleaning a messy CSV: missing values, duplicates, types, outliers</td></tr>
+  <tr><td>6–7</td><td>Joining, <code>groupby</code>, pivot tables</td></tr>
+  <tr><td>8</td><td>Charts with matplotlib and seaborn</td></tr>
+  <tr><td>9–10</td><td>KPIs over time, cohorts, retention, RFM, churn, funnel</td></tr>
+  <tr><td>11</td><td>Final case: quarterly business review</td></tr>
+  <tr><td>12</td><td>Bonus for Data Mining: correlation, encoding, scaling, k-means</td></tr>
+  <tr><td>A</td><td>Exam drill, cheat sheet, error decoder, glossary EN→RU</td></tr>
+</table></section>
+
+<footer>
+  Data: Google's public <code>thelook_ecommerce</code> dataset (synthetic, non-personal columns only).
+  · <a href="https://github.com/StanislavSidorovich/pandas-analyst-path">Source on GitHub</a>
+  · Practise SQL and pandas on the go in <a href="https://quaera.app">Quaera</a>
+  · Design databases in <a href="https://model.quaera.app">StrataSQL</a>
+</footer>
+
+</div></body></html>
