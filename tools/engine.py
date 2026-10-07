@@ -296,14 +296,17 @@ def _compare(u, r, o):
         if isinstance(r, (list, tuple, set, pd.Index, np.ndarray)):
             return _cmp_list(u, r, o)
         if isinstance(r, (bool, np.bool_)):
-            return (bool(u) == bool(r) and isinstance(u, (bool, np.bool_))), "Expected True or False."
+            ok = bool(u) == bool(r) and isinstance(u, (bool, np.bool_))
+            return ok, "" if ok else "Expected True or False."
         if _is_num(r):
             return _cmp_number(u, r, o)
         if isinstance(r, str):
             if not isinstance(u, str):
                 return False, f"Expected text (a string), but you have {_kind(u)}."
-            return (u.strip().lower() == r.strip().lower()), f"Your answer {u!r} is not the expected one."
-        return (str(u) == str(r)), f"Your answer {u!r} is not the expected one."
+            ok = u.strip().lower() == r.strip().lower()
+            return ok, "" if ok else f"Your answer {u!r} is not the expected one."
+        ok = str(u) == str(r)
+        return ok, "" if ok else f"Your answer {u!r} is not the expected one."
     except Exception as e:                                              # never crash the learner's cell
         return False, f"Could not compare ({type(e).__name__}: {e})."
 
