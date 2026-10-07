@@ -28,10 +28,10 @@ and the checker explains *why* an answer is wrong.
 
 **137 auto-checked tasks.** When stuck: `hint("7.2")` → `compare("7.2")` → `solution("7.2")`.
 
-## How to use it (laptop, tablet or phone)
+## How to use it (laptop, or a tablet with a keyboard)
 
 1. Click **Open in Colab** above, then **File → Save a copy in Drive**.
-2. From then on open *your copy* (Colab → Recent, or Google Drive) on any device. Your code and ✅ outputs are saved there.
+2. From then on open *your copy* (Colab → Recent, or Google Drive). Your code and ✅ outputs are saved there. A phone is fine for reading and running cells, and for keeping the cheat sheet open next to the laptop; typing code on it is slow.
 3. Run the hidden **⚙️ Setup** cell, then the **▶ Part setup** cell of the part you're on.
 
 No Google login is needed for the data: a frozen snapshot (~10 MB, `data/*.parquet`) downloads from this repo.

@@ -4,70 +4,177 @@
 <meta name="description" content="One Colab notebook from the first df.head() to business analytics with pandas: 137 auto-checked tasks on an e-commerce dataset.">
 <meta property="og:title" content="Pandas Analyst Path">
 <meta property="og:description" content="One Colab notebook, 137 auto-checked pandas tasks: from df.head() to cohorts, RFM and churn. Free, no login for the data.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e3e3e0;--code:#f0efe9;--accent:#2f6fde;--on-accent:#fff}
-@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1d1d20;--ink:#ececee;--muted:#a0a0a8;--line:#2e2e33;--code:#2a2a2f;--accent:#7aa7ff;--on-accent:#0b1530}}
+:root{--bg:#f7f7f5;--dot:#d9d9d4;--card:#fff;--ink:#1d1d1f;--muted:#4a4a50;--faint:#5f5f66;--line:#e3e3e0;--code:#f0efe9;--cell:#f5f5f2;
+--accent:#2f6fde;--on-accent:#fff;--hi:#eef3fd;--hi-line:#c9d8f6;--hi-ink:#24509e;
+--bad:#b3261e;--bad-bg:#fdf3f2;--tip:#7a4a00;--good:#1e7a3c;--good-bg:#f1f8f3;--shadow:rgba(20,20,30,.28)}
+@media (prefers-color-scheme:dark){:root{--bg:#141416;--dot:#2a2a2f;--card:#1d1d20;--ink:#ececee;--muted:#b4b4bc;--faint:#a0a0a8;--line:#2e2e33;--code:#2a2a2f;--cell:#25252a;
+--accent:#7aa7ff;--on-accent:#0b1530;--hi:#1b2740;--hi-line:#2f4670;--hi-ink:#a9c4ff;
+--bad:#ff8a80;--bad-bg:#2c1c1c;--tip:#f0c27a;--good:#7ad69a;--good-bg:#17281d;--shadow:rgba(0,0,0,.6)}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-.wrap{max-width:720px;margin:0 auto;padding:32px 16px 48px}
-h1{font-size:28px;line-height:1.2;margin:0 0 10px}
-.lead{font-size:17px;color:var(--muted);margin:0 0 22px}
-.cta{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 30px}
-.btn{display:inline-block;text-decoration:none;font-weight:600;border-radius:10px;padding:11px 18px;border:1px solid var(--line);color:var(--ink);background:var(--card)}
-.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-h2{font-size:14px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin:28px 0 10px}
-section{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:6px 18px 12px}
-ol,ul{margin:8px 0;padding-left:22px}
-li{margin:4px 0}
-code{font:14px/1.4 ui-monospace,Consolas,monospace;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
-table{border-collapse:collapse;width:100%;font-size:15px}
-td{vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
-tr:last-child td{border-bottom:0}
-td:first-child{color:var(--muted);white-space:nowrap;width:1%}
+[hidden]{display:none!important}
+body{margin:0;background-color:var(--bg);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:22px 22px;color:var(--ink);
+font:16px/1.55 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:0 16px 56px}
+code,pre{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace}
+code{font-size:.88em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
 a{color:var(--accent)}
-footer{margin-top:32px;font-size:14px;color:var(--muted)}
+nav{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;padding:20px 0}
+.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:17px}
+.links{display:flex;gap:20px;font-size:15px}
+.links a{color:var(--muted);text-decoration:none}
+.links a:hover{color:var(--ink);text-decoration:underline}
+.hero{display:flex;flex-wrap:wrap;gap:40px 48px;align-items:center;padding:32px 0 56px}
+.hero-text{flex:1 1 420px;min-width:0}
+.hero-demo{flex:1 1 500px;min-width:0}
+.kicker{margin:0 0 14px;font-size:14px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+h1{margin:0 0 18px;font-size:clamp(32px,5vw,48px);line-height:1.1;letter-spacing:-.01em}
+h1 code{font-size:.8em;font-weight:500;padding:2px 8px;border-radius:6px}
+.lead{margin:0 0 28px;font-size:19px;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin:0 0 16px}
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:10px;font-family:inherit;font-size:17px;font-weight:600;line-height:1;
+text-decoration:none;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.note{margin:0;font-size:15px;color:var(--faint)}
+/* the notebook window */
+.nb{background:var(--card);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px -18px var(--shadow);overflow:hidden}
+.nb-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);font:13px "IBM Plex Mono",monospace;color:var(--muted)}
+.nb-body{padding:18px 18px 4px}
+.task-id{margin:0 0 4px;font-size:13px;font-weight:600;color:var(--faint)}
+.task-q{margin:0 0 14px;font-size:15px}
+.cell{display:flex;gap:10px;align-items:flex-start;margin:0 0 4px}
+.run{flex:0 0 auto;width:26px;height:26px;border-radius:50%;background:var(--code);color:var(--muted);display:flex;align-items:center;justify-content:center}
+.cell pre{flex:1 1 auto;min-width:0;margin:0;padding:10px 12px;background:var(--cell);border-radius:6px;font-size:13.5px;line-height:1.55;overflow-x:auto}
+.out{margin:0 0 18px 36px;padding:10px 12px;font:13px/1.6 "IBM Plex Mono",monospace;white-space:pre-wrap;overflow-wrap:anywhere}
+.out.bad{border-left:3px solid var(--bad);background:var(--bad-bg)}
+.out.good{border-left:3px solid var(--good);background:var(--good-bg);color:var(--good);font-weight:500}
+.bad b{color:var(--bad);font-weight:500}.tip{color:var(--tip);font-weight:500}
+.caption{margin:12px 4px 0;font-size:14px;color:var(--faint)}
+/* the phone block: only on narrow screens */
+.phone{display:none;margin:0 0 20px;padding:16px 18px;background:var(--hi);border:1px solid var(--hi-line);border-radius:12px}
+.phone h2{margin:0 0 6px;font-size:17px}
+.phone p{margin:0 0 10px;font-size:15px}
+.phone ul{margin:0;padding-left:20px;font-size:15px}
+.phone li{margin:6px 0}
+.phone .btn{width:100%;justify-content:center;margin:4px 0 10px}
+.desk-only{display:inline}
+@media (max-width:720px){
+  .phone{display:block}
+  .desk-only{display:none}
+  .can-save .cta .btn.primary{background:var(--card);border-color:var(--line);color:var(--ink)}
+  .hero{padding-top:12px}
+}
+section.block{padding:8px 0 48px}
+section.block h2{margin:0 0 6px;font-size:26px}
+.sub{margin:0 0 20px;font-size:17px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.grid.wide{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card .step{margin:0 0 8px;font-size:13px;font-weight:600;color:var(--faint)}
+.card .fn{font:500 16px "IBM Plex Mono",monospace;color:var(--accent);background:none;padding:0}
+.card p{margin:8px 0 0;font-size:15px}
+.part{padding:16px 18px}
+.card .n{margin:0 0 4px;font:13px "IBM Plex Mono",monospace;color:var(--faint)}
+.card .t{margin:0;font-size:16px;line-height:1.45}
+.part.key{background:var(--hi);border-color:var(--hi-line)}
+.part.key .n{color:var(--hi-ink)}.part.key .t{font-weight:600}
+ol.steps{margin:0;padding:0;list-style:none}
+ol.steps li{font-size:16px}
+ol.steps .num{display:block;font-size:28px;font-weight:700;color:var(--accent);margin-bottom:6px}
+footer{border-top:1px solid var(--line);padding-top:20px;font-size:14px;color:var(--faint)}
 footer a{color:inherit}
 </style></head>
 <body><div class="wrap">
 
-<h1>Pandas Analyst Path</h1>
-<p class="lead">One Colab notebook that takes you from the first <code>df.head()</code> to real business questions: KPIs, cohorts, RFM, churn, funnel. 137 small tasks, each auto-checked, and the checker explains <em>why</em> an answer is wrong.</p>
+<nav>
+  <a class="brand" href="./"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="4"/><path d="M3 10h20M10 10v13"/></svg>Pandas Analyst Path</a>
+  <div class="links"><a href="#inside">What is inside</a><a href="cheatsheet.html">Cheat sheet</a><a href="https://github.com/StanislavSidorovich/pandas-analyst-path">GitHub</a></div>
+</nav>
 
-<div class="cta">
-  <a class="btn primary" href="https://colab.research.google.com/github/StanislavSidorovich/pandas-analyst-path/blob/main/Pandas_Analyst_Path.ipynb">Open in Colab</a>
-  <a class="btn" href="cheatsheet.html">Cheat sheet</a>
+<div class="hero">
+  <div class="hero-text">
+    <p class="kicker">Free Colab notebook · 137 tasks</p>
+    <h1>From <code>df.head()</code> to the questions analysts get paid for</h1>
+    <p class="lead">KPIs, cohorts, RFM, churn and a funnel, on an e-commerce dataset. Every task is checked automatically, and when an answer is wrong the checker says <em>why</em>.</p>
+
+    <div class="phone" aria-labelledby="phone-h">
+      <h2 id="phone-h">On a phone right now?</h2>
+      <p>The notebook is made for a laptop or a tablet with a keyboard. On a phone you can read and run cells, but typing pandas code is slow.</p>
+      <button class="btn primary" id="save" type="button" hidden>Save the link for later</button>
+      <ul>
+        <li>Later, at the laptop: keep the <a href="cheatsheet.html">cheat sheet</a> open on your phone as a second screen.</li>
+        <li>Want to practise on the phone today? <a href="https://quaera.app">Quaera</a> has a pandas track: 66 short tasks where code is put together from tap-to-insert buttons.</li>
+      </ul>
+    </div>
+
+    <div class="cta">
+      <a class="btn primary" href="https://colab.research.google.com/github/StanislavSidorovich/pandas-analyst-path/blob/main/Pandas_Analyst_Path.ipynb">Open in Colab
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 9h10M10 5l4 4-4 4"/></svg></a>
+      <a class="btn" href="cheatsheet.html">Cheat sheet</a>
+    </div>
+    <p class="note">No Google login for the data<span class="desk-only"> · best on a laptop or a tablet with a keyboard</span></p>
+  </div>
+
+  <div class="hero-demo">
+    <div class="nb">
+      <div class="nb-bar"><svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#e8710a" stroke-width="2" aria-hidden="true"><circle cx="6" cy="9" r="4"/><circle cx="12" cy="9" r="4"/></svg>Pandas_Analyst_Path.ipynb</div>
+      <div class="nb-body">
+        <p class="task-id">Task 1.10 · The biggest category</p>
+        <p class="task-q">Which product <code>category</code> has the most products? Store its <strong>name</strong> (a string).</p>
+        <div class="cell"><span class="run" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg></span>
+<pre>top_category = products['category'].value_counts().max()
+check('1.10')</pre></div>
+        <div class="out bad"><b>✗ Task 1.10: not yet.</b> Expected text (a string), but you have int64.
+<span class="tip">Typical mistake:</span> `.max()` gives the biggest count. You need the label: `.idxmax()`.</div>
+        <div class="cell"><span class="run" aria-hidden="true"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="currentColor"/></svg></span>
+<pre>top_category = products['category'].value_counts().idxmax()
+check('1.10')</pre></div>
+        <div class="out good">✓ Task 1.10 passed!</div>
+      </div>
+    </div>
+    <p class="caption">What <code>check()</code> prints for a wrong answer, then for the right one.</p>
+  </div>
 </div>
 
-<h2>How to start</h2>
-<section><ol>
-  <li>Open in Colab, then <strong>File → Save a copy in Drive</strong>. From now on work in your copy, on a laptop, tablet or phone.</li>
-  <li>Run the <strong>⚙️ Setup</strong> cell, then the <strong>▶ Part setup</strong> cell of the part you are on.</li>
-  <li>Solve a task and run its <code>check("1.1")</code> cell.</li>
-</ol>
-<p>No Google login is needed for the data: a snapshot of the dataset downloads automatically.</p></section>
+<section class="block" aria-labelledby="stuck">
+  <h2 id="stuck">Stuck? Climb the ladder</h2>
+  <p class="sub">Add a cell under the task (<strong>+ Code</strong>) and ask for as much help as you need, one step at a time.</p>
+  <div class="grid">
+    <div class="card"><p class="step">Step 1</p><code class="fn">cheat()</code><p>The concept table for this task</p></div>
+    <div class="card"><p class="step">Step 2</p><code class="fn">hint()</code><p>A nudge; run it again for a stronger one</p></div>
+    <div class="card"><p class="step">Step 3</p><code class="fn">compare()</code><p>Your answer next to the expected one</p></div>
+    <div class="card"><p class="step">Step 4</p><code class="fn">solution()</code><p>One possible solution, to retype yourself</p></div>
+  </div>
+</section>
 
-<h2>When you are stuck</h2>
-<section><p>Add a cell under the task (<strong>+ Code</strong>) and climb the ladder:</p>
-<ol>
-  <li><code>cheat()</code>: the concept table for this task</li>
-  <li><code>hint()</code>: a nudge; run it again for a stronger one</li>
-  <li><code>compare()</code>: your answer next to the expected one</li>
-  <li><code>solution()</code>: one possible solution, to retype yourself</li>
-</ol></section>
+<section class="block" id="inside" aria-labelledby="inside-h">
+  <h2 id="inside-h">What is inside</h2>
+  <p class="sub">Thirteen parts in this order; the business analytics is in parts 9 to 11.</p>
+  <div class="grid wide">
+    <div class="card part"><p class="n">Part 0</p><p class="t">How the notebook works · the data · SQL → pandas</p></div>
+    <div class="card part"><p class="n">Parts 1–2</p><p class="t">First look, selecting, filtering</p></div>
+    <div class="card part"><p class="n">Parts 3–4</p><p class="t">New columns, dates</p></div>
+    <div class="card part"><p class="n">Part 5</p><p class="t">Cleaning a messy CSV: missing values, duplicates, types, outliers</p></div>
+    <div class="card part"><p class="n">Parts 6–7</p><p class="t">Joining, <code>groupby</code>, pivot tables</p></div>
+    <div class="card part"><p class="n">Part 8</p><p class="t">Charts with matplotlib and seaborn</p></div>
+    <div class="card part key"><p class="n">Parts 9–10</p><p class="t">KPIs over time, cohorts, retention, RFM, churn, funnel</p></div>
+    <div class="card part key"><p class="n">Part 11</p><p class="t">Final case: quarterly business review</p></div>
+    <div class="card part"><p class="n">Part 12</p><p class="t">Bonus for Data Mining: correlation, encoding, scaling, k-means</p></div>
+    <div class="card part"><p class="n">Appendix</p><p class="t">Exam drill, cheat sheet, error decoder, glossary EN→RU</p></div>
+  </div>
+</section>
 
-<h2>What is inside</h2>
-<section><table>
-  <tr><td>0</td><td>How the notebook works · the data · SQL → pandas</td></tr>
-  <tr><td>1–2</td><td>First look, selecting, filtering</td></tr>
-  <tr><td>3–4</td><td>New columns, dates</td></tr>
-  <tr><td>5</td><td>Cleaning a messy CSV: missing values, duplicates, types, outliers</td></tr>
-  <tr><td>6–7</td><td>Joining, <code>groupby</code>, pivot tables</td></tr>
-  <tr><td>8</td><td>Charts with matplotlib and seaborn</td></tr>
-  <tr><td>9–10</td><td>KPIs over time, cohorts, retention, RFM, churn, funnel</td></tr>
-  <tr><td>11</td><td>Final case: quarterly business review</td></tr>
-  <tr><td>12</td><td>Bonus for Data Mining: correlation, encoding, scaling, k-means</td></tr>
-  <tr><td>A</td><td>Exam drill, cheat sheet, error decoder, glossary EN→RU</td></tr>
-</table></section>
+<section class="block" aria-labelledby="start">
+  <h2 id="start">How to start</h2>
+  <ol class="steps grid wide">
+    <li class="card"><span class="num">1</span>Open in Colab, then <strong>File → Save a copy in Drive</strong>. From now on work in your copy.</li>
+    <li class="card"><span class="num">2</span>Run the <strong>⚙️ Setup</strong> cell, then the <strong>▶ Part setup</strong> cell of the part you are on.</li>
+    <li class="card"><span class="num">3</span>Solve a task and run its <code>check("1.1")</code> cell.</li>
+  </ol>
+</section>
 
 <footer>
   Data: Google's public <code>thelook_ecommerce</code> dataset (synthetic, non-personal columns only).
@@ -76,4 +183,23 @@ footer a{color:inherit}
   · Design databases in <a href="https://model.quaera.app">StrataSQL</a>
 </footer>
 
-</div></body></html>
+</div>
+<script>
+(function () {
+  var b = document.getElementById('save');
+  if (!b) return;
+  var url = 'https://pandas.quaera.app/';
+  var canShare = !!navigator.share, canCopy = !!(navigator.clipboard && navigator.clipboard.writeText);
+  if (!canShare && !canCopy) return;
+  b.hidden = false;
+  document.body.classList.add('can-save');
+  b.addEventListener('click', function () {
+    if (canShare) {
+      navigator.share({ title: 'Pandas Analyst Path', text: 'A pandas notebook to open on my laptop', url: url }).catch(function () {});
+    } else {
+      navigator.clipboard.writeText(url).then(function () { b.textContent = 'Link copied'; }, function () {});
+    }
+  });
+})();
+</script>
+</body></html>
