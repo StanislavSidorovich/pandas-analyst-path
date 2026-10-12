@@ -2,7 +2,7 @@
 # Checker engine. Inlined into the notebook's hidden Setup cell by build_notebook.py.
 # Expects these globals to exist before it runs: _PAYLOAD (base64 zlib JSON), _BASE (dict of
 # pristine DataFrames), TODAY, CRM_PATH, pd, np, plt, sns.
-# Public helpers: check(id), hint(id), solution(id), compare(id), show_me(id), cheat(), progress()
+# Public helpers: check(id), hint(id), solution(id), compare(id), show_me(id), cheat(), data(), progress()
 # ---------------------------------------------------------------------------
 import io as _io
 from contextlib import redirect_stdout as _redirect
@@ -11,6 +11,7 @@ from IPython.display import display as _display, Markdown as _Markdown
 
 _P = _json.loads(_zlib.decompress(_b64.b64decode(_PAYLOAD)).decode("utf-8"))
 _TASKS, _PARTS, _SECTIONS = _P["tasks"], _P["parts"], _P["sections"]
+_DATA_MD = _P.get("data_md", "")
 _PASSED, _HINT_LEVEL, _REF_VALUES, _NS_CACHE = set(), {}, {}, {}
 _LAST = {"id": None, "via": None}   # task of the last run task cell or check(): hint()/compare()/solution() default to it
 
@@ -433,6 +434,7 @@ def check(task_id):
     if t.get("needs"):
         print(f"   ↪ This task builds on {', '.join(t['needs'])}. Make sure those pass first.")
     print(f"   Stuck? In a new cell (+ Code) run  cheat()  ·  hint()  ·  then compare()  ·  then solution()   (they refer to task {t['id']})")
+    print("   Not sure which table to use?  data()  shows the map of the tables.")
 
 
 def _prev_block(tid):
@@ -611,6 +613,26 @@ def cheat(what=None):
               "or cheat('all') for the full table.")
         return
     _display(_Markdown(f"*Lines mentioning* `{key}`:\n\n" + "\n\n".join(found)))
+
+
+def data(table=None):
+    """The map of the tables, right here: data() for all five, data('orders') for one table's columns and first rows."""
+    if table is None:
+        _display(_Markdown(_DATA_MD))
+        return
+    name = str(table).strip().lower()
+    if name not in _BASE:
+        print(f"No table {table!r}. The tables are: {', '.join(_BASE)}.  Try data('users').")
+        return
+    df = globals().get(name)
+    if not isinstance(df, pd.DataFrame):
+        df = _BASE[name]
+    one = next((l for l in _DATA_MD.splitlines() if l.startswith(f"| `{name}`")), "")
+    cells = [c.strip() for c in one.strip("|").split("|")]
+    if len(cells) >= 3:
+        print(f"{name}: one row = {cells[2]} · {len(df):,} rows × {df.shape[1]} columns")
+    _display(pd.DataFrame({"dtype": df.dtypes.astype(str), "example": df.iloc[0] if len(df) else None}))
+    _display(df.head(3))
 
 
 def progress():

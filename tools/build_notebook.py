@@ -71,7 +71,7 @@ users, products, orders, order_items, sessions = fresh_data()
 print(f"✅ Setup done · data: {_source} · TODAY = {TODAY.date()} · pandas {pd.__version__}")
 for _t in _TABLES:
     print(f"   {_t:12s} {len(_BASE[_t]):>9,} rows")
-print("Helpers: check('1.3') · then, for the task you ran or checked last: cheat() · hint() · compare() · solution() · show_me() · and progress() · reset_data()")
+print("Helpers: check('1.3') · then, for the task you ran or checked last: cheat() · hint() · compare() · solution() · show_me() · data() = map of the tables · progress() · reset_data()")
 '''
 
 
@@ -105,7 +105,7 @@ def build():
     with open(os.path.join(ROOT, "data", "crm_signups_export.csv"), encoding="utf-8") as f:
         crm = f.read().replace("\r\n", "\n")
     b.crm = crm
-    payload_raw = {"tasks": b.tasks, "parts": b.parts, "sections": b.sections, "crm": crm}
+    payload_raw = {"tasks": b.tasks, "parts": b.parts, "sections": b.sections, "data_md": b.data_md, "crm": crm}
     import base64, zlib
     payload = base64.b64encode(zlib.compress(json.dumps(payload_raw, ensure_ascii=False).encode(), 9)).decode()
 

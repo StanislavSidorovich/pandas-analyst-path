@@ -1,4 +1,5 @@
 """Intro + Parts 1-4."""
+import textwrap
 
 
 def intro(b, colab_url):
@@ -116,10 +117,7 @@ def setup_placeholder(b):
     b.code("# SETUP_PLACEHOLDER", hidden=True)
 
 
-def meet_data(b):
-    b.md("""
-    ## 🏢 Meet TheLook and its data
-
+DATA_MAP = """
     TheLook sells clothes online to customers worldwide. The data is Google's public demo dataset
     `bigquery-public-data.thelook_ecommerce`. The data is synthetic, but it is structured exactly like a real shop's database.
     Snapshot date: **`TODAY` = 2026‑10‑01** (data up to 30 Sep 2026).
@@ -138,7 +136,14 @@ def meet_data(b):
       └──< sessions (user_id, only for logged-in visitors)
     ```
     Order **status** flow: `Processing → Shipped → Complete`, or the order ends as `Cancelled` / `Returned`.
-    """)
+"""
+
+
+def meet_data(b):
+    b.data_md = textwrap.dedent(DATA_MAP).strip()   # data() shows the same block inside any task
+    b.md("## 🏢 Meet TheLook and its data" + "\n\n" + b.data_md
+         + "\n\n> 🗺️ **Lost in a task?** Run `data()` in any cell to see this map of the tables right under the task, "
+         "or `data(\"orders\")` for one table's columns and first rows.")
     b.md("""
     ### Where the data comes from: SQL first, pandas second
     In most companies the data sits in a warehouse (BigQuery, Snowflake, SQL Server…). The analyst **pulls a slice with SQL**,

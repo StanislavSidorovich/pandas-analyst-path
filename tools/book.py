@@ -22,6 +22,7 @@ class Book:
         self.cur = None
         self.part_titles = {}
         self.sections = {}      # "1.3" → {"part", "title", "md"}: the 📘 block cheat() shows
+        self.data_md = ""       # the "Meet TheLook" table map: data() shows it inside any task
         self.cur_section = None  # section of the tasks that follow; None inside a checkpoint → whole part
 
     # ---------------------------------------------------------------- cells
@@ -84,17 +85,17 @@ class Book:
         }
         self.parts[self.cur].append({"kind": "task", "id": tid, "code": solution, "plot": bool(plot)})
         self.md(f"#### ✍️ Task {tid} · {LEVEL[level]} · {title}\n\n" + textwrap.dedent(prompt).strip()
-                + f"\n\n*Result goes into:* `{var}`")
+                + f"\n\n*Result goes into:* `{var}` · *not sure which table?* run `data()`")
         starter = textwrap.dedent(starter).strip()
         learner = f"# Task {tid}: your code here\n" + (starter + "\n" if starter else "")
         self.cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
                            "source": _src(learner), "_solution": f"# Task {tid}\n" + solution})
         self.cells.append({"cell_type": "code", "metadata": {}, "execution_count": None, "outputs": [],
-                           "source": _src(f'check("{tid}")   # stuck? in a new cell: cheat() → hint() → compare() → solution()')})
+                           "source": _src(f'check("{tid}")   # stuck? in a new cell: cheat() → hint() → compare() → solution()  ·  tables: data()')})
 
     # ---------------------------------------------------------------- output
     def payload(self):
-        raw = json.dumps({"tasks": self.tasks, "parts": self.parts, "sections": self.sections}, ensure_ascii=False).encode("utf-8")
+        raw = json.dumps({"tasks": self.tasks, "parts": self.parts, "sections": self.sections, "data_md": self.data_md}, ensure_ascii=False).encode("utf-8")
         return base64.b64encode(zlib.compress(raw, 9)).decode("ascii")
 
     def notebook(self, with_solutions=False):
