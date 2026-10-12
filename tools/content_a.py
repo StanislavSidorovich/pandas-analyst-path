@@ -246,6 +246,8 @@ def part1(b):
     - `df[["col1", "col2"]]` → a **DataFrame**. The outer brackets mean "select", the inner ones are a Python list.
     - `df.col` also works for simple names, but fails for names with spaces and clashes with methods. Prefer brackets.
     - `df.rename(columns={"old": "new"})` returns a renamed copy.
+    - Column names as a plain Python list: `list(df.columns)` or `df.columns.tolist()` (same result; `.tolist()` reads left to
+      right at the end of a chain, `list(...)` wraps around it). Works on any Index or Series.
     """)
     b.code("""
     # 🔍 Predict: what is the type of each result?
@@ -287,7 +289,7 @@ def part1(b):
 
     So "which ones?" questions (names, top 3, the biggest) are answered by the **index**, and "how many?" questions by
     the **values**. `.head(3)` keeps the first 3 rows, `.index` takes their labels, `list(...)` makes them a plain list
-    (same trick as `list(products.columns)` in 1.2).
+    (same trick as `list(products.columns)` in 1.2). Or put `.tolist()` at the end of the chain: `.head(3).index.tolist()`.
     """)
     b.code("""
     # 🔍 How do customers find us?
@@ -371,7 +373,7 @@ def part1(b):
          "No row filtering is needed here.",
          "Count countries with `value_counts()`, keep the first 3 rows with `.head(3)`, take their labels with `.index`, "
          "wrap it all in `list(...)`.",
-         "`list(users['country'].value_counts().head(3).index)`"], cmp={"ordered": True},
+         "`list(users['country'].value_counts().head(3).index)`  (or `users['country'].value_counts().head(3).index.tolist()`)"], cmp={"ordered": True},
         traps=[("top3_countries = users['country'].value_counts().head(3)",
                 "that's a Series: country → **count**. You need only the names: take its `.index` and wrap it in `list(...)`.")])
     b.task("1.C2", "Share of Search", """
