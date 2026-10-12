@@ -450,13 +450,12 @@ def _get(task_id):
             print("⚠️ Run your task cell (or its check) first, then hint() knows which task you mean. "
                   "Or name it: hint('1.3').")
             return None
-        if _LAST["via"] == "check" and task_id in _PASSED:   # last checked task is done → the learner is stuck on the next one
+        if task_id in _PASSED:    # still this task (hints/solution of a passed task are worth reading); say how to move on
             ids = list(_TASKS)
             i = ids.index(task_id)
-            if i + 1 < len(ids):
-                task_id = ids[i + 1]
-                print(f"(Task {_LAST['id']} is done, so this is for the next one, {task_id}. "
-                      f"Another task? Name it: hint('X.Y').)")
+            nxt = f"hint('{ids[i + 1]}')" if i + 1 < len(ids) else "hint('X.Y')"
+            print(f"(Task {task_id} is already passed ✅, so this is its hint. For the next task run its cell first, "
+                  f"or name it: {nxt}.)")
     if not isinstance(task_id, str):
         print(f"⚠️ Put the task id in quotes: check('{task_id}'). Without quotes 3.10 and 3.1 look the same.")
     t = _TASKS.get(str(task_id))
