@@ -434,6 +434,7 @@ def check(task_id):
     if t.get("needs"):
         print(f"   ↪ This task builds on {', '.join(t['needs'])}. Make sure those pass first.")
     print(f"   Stuck? In a new cell (+ Code) run  cheat()  ·  hint()  ·  then compare()  ·  then solution()   (they refer to task {t['id']})")
+    print("   Code looks right but still ❌? Run your solution cell again, THEN check (the order of runs matters).")
     print("   Not sure which table to use?  data()  shows the map of the tables.")
 
 

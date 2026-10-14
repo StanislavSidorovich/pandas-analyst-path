@@ -90,6 +90,16 @@ def build():
        `cheat()`, `hint()`, `compare()` and `solution()` refer to **the task you ran or checked last**, so you never type task numbers.
        Later tasks have no ready-made hint cell: add one with **+ Code** (see *Colab basics*) and type `hint()`.
     3. Write your code in the `# Task 0.1` cell, **run it** (Shift+Enter), then run `check("0.1")` again → ✅.
+
+    ### If something looks wrong
+    | What you see | Usually means | Fix |
+    |---|---|---|
+    | ❌ "not yet", but the code looks right | `check` was run **before** the solution cell (compare the `[N]` numbers: the larger one ran later) | run the solution cell, then `check` again |
+    | `hint()` talks about another task | you are looking at an **old output** (Colab keeps it), or the cell's first line is not `# Task X.Y` | re-run `hint()` in a new cell, or name the task: `hint("2.11")` |
+    | `NameError` (e.g. `products` not defined) | the Colab runtime was reset | re-run ⚙️ Setup, then the "▶ Part N setup" cell |
+    | table looks changed after experiments | you modified it in place | re-run the "▶ Part N setup" cell or `reset_data()` |
+
+    Rules: keep the `# Task X.Y` first line · order is solution → `check` → `hint()` · run top to bottom.
     """)
     b.task("0.1", "How many customers?", """
         Store the number of rows of `users` in a variable called `n_users`.
