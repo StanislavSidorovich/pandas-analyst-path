@@ -125,7 +125,10 @@ def build_page(sections, part_titles):
                         f"{md_to_html(sec['md'])}</section>")
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pandas Cheat Sheet</title><style>{CSS}</style></head>
+<title>Pandas Cheat Sheet</title><style>{CSS}</style>
+<!-- Cloudflare Web Analytics: cookieless page-view counts, on the live site only (not local runs). -->
+<script>if(location.hostname==='pandas.quaera.app'){{const s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.dataset.cfBeacon='{{"token": "23b9d946ef0b44c2ab4bb2da675d630b"}}';document.head.appendChild(s)}}</script>
+</head>
 <body><header><div class="wrap"><h1>📋 Pandas Analyst Path <small>· cheat sheet, built from the lessons</small></h1>
 <input id="q" type="search" placeholder="Search: index, merge, NaN, KeyError…" autocomplete="off">
 <nav>{''.join(nav)}</nav></div></header>
