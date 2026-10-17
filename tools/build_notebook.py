@@ -18,6 +18,11 @@ import content_a, content_b, content_c                   # noqa: E402
 REPO = "StanislavSidorovich/pandas-analyst-path"
 NB_NAME = "Pandas_Analyst_Path.ipynb"
 COLAB_URL = f"https://colab.research.google.com/github/{REPO}/blob/main/{NB_NAME}"
+# Git tag the Setup cell loads tools/engine.py and data/tasks.payload from. A saved copy of the
+# notebook keeps working after later changes because it always fetches the files of its own tag.
+# After changing content or the engine: bump this, rebuild, commit, then `git tag <ASSET_REF>` and push the tag.
+ASSET_REF = "nb-v1"
+PAYLOAD_PATH = "data/tasks.payload"
 
 SETUP_HEAD = '''# @title ⚙️ Setup: run this cell first (≈15 s). The code is hidden; double-click here to see it.
 DATA_SOURCE = "github"  # @param ["github", "bigquery"]
@@ -61,7 +66,18 @@ def _load():
 _source, _BASE = _load()
 TODAY = (_BASE["orders"]["created_at"].max().to_period("M") + 1).to_timestamp()   # first day after the data
 CRM_PATH = "crm_signups_export.csv"
-_PAYLOAD = "{payload}"
+
+# Tasks and the checker live in the repo, pinned to this notebook's version (tag {ref}).
+_ASSETS = "https://raw.githubusercontent.com/{repo}/{ref}/"
+def _asset(path):
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return f.read()
+    import urllib.request
+    with urllib.request.urlopen(_ASSETS + path) as r:
+        return r.read().decode("utf-8")
+_PAYLOAD = _asset("{payload_path}")
+exec(compile(_asset("tools/engine.py"), "engine.py", "exec"))
 '''
 
 SETUP_TAIL = '''
@@ -119,11 +135,12 @@ def build():
     import base64, zlib
     payload = base64.b64encode(zlib.compress(json.dumps(payload_raw, ensure_ascii=False).encode(), 9)).decode()
 
-    engine = open(os.path.join(HERE, "engine.py"), encoding="utf-8").read()
-    setup = (SETUP_HEAD.format(repo=REPO, payload=payload,
+    with open(os.path.join(ROOT, PAYLOAD_PATH), "w", encoding="utf-8", newline="\n") as f:
+        f.write(payload)
+    setup = (SETUP_HEAD.format(repo=REPO, ref=ASSET_REF, payload_path=PAYLOAD_PATH,
                                queries_src=inspect.getsource(extract_snapshot.queries).strip(),
                                normalize_src=inspect.getsource(extract_snapshot.normalize).strip())
-             + "\n" + engine + SETUP_TAIL)
+             + SETUP_TAIL)
     for c in b.cells:
         if c["cell_type"] == "code" and c["source"] and c["source"][0].startswith("# SETUP_PLACEHOLDER"):
             c["source"] = _src(setup)

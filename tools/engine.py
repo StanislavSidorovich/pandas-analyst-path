@@ -1,5 +1,6 @@
 # ---------------------------------------------------------------------------
-# Checker engine. Inlined into the notebook's hidden Setup cell by build_notebook.py.
+# Checker engine. The notebook's hidden Setup cell downloads this file (pinned to a git tag,
+# see ASSET_REF in build_notebook.py) and runs it in the notebook's namespace.
 # Expects these globals to exist before it runs: _PAYLOAD (base64 zlib JSON), _BASE (dict of
 # pristine DataFrames), TODAY, CRM_PATH, pd, np, plt, sns.
 # Public helpers: check(id), hint(id), solution(id), compare(id), show_me(id), cheat(), data(), progress()

@@ -43,16 +43,21 @@ To use the live BigQuery data instead, set `DATA_SOURCE = "bigquery"` and your `
 ```
 Pandas_Analyst_Path.ipynb   the notebook (generated, don't edit by hand)
 data/                       snapshot of thelook_ecommerce (through 2026-09-30) + the messy CRM CSV for Part 5
+data/tasks.payload          tasks, hints and solutions (generated; the Setup cell downloads it)
 tools/
   extract_snapshot.py       BigQuery → data/*.parquet (the same SQL the notebook uses in bigquery mode)
   make_crm.py               generates the deliberately messy CSV
   content_a/b/c.py          lesson content, tasks, hints, reference solutions
-  engine.py                 the checker (inlined into the hidden Setup cell)
+  engine.py                 the checker (the Setup cell downloads it from the ASSET_REF tag)
   book.py, build_notebook.py  build the notebook
   test_notebook.py          runs the solutions version (every check must pass) and the blank version
 ```
 
 Rebuild after editing content: `python tools/build_notebook.py && python tools/test_notebook.py`
+
+The Setup cell loads `tools/engine.py` and `data/tasks.payload` from the git tag in `ASSET_REF`
+(build_notebook.py), so saved copies keep matching files. After changing content or the engine:
+bump `ASSET_REF`, rebuild, test, commit, `git tag <ASSET_REF>`, push the commit and the tag.
 
 ## Data
 
