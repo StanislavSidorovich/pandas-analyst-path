@@ -129,7 +129,7 @@ def build_page(sections, part_titles):
 <!-- Cloudflare Web Analytics: cookieless page-view counts, on the live site only (not local runs). -->
 <script>if(location.hostname==='pandas.quaera.app'){{const s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.dataset.cfBeacon='{{"token": "23b9d946ef0b44c2ab4bb2da675d630b"}}';document.head.appendChild(s)}}</script>
 </head>
-<body><header><div class="wrap"><h1>📋 Pandas Analyst Path <small>· cheat sheet, built from the lessons</small></h1>
+<body><header><div class="wrap"><h1>📋 Quaera Pandas <small>· cheat sheet, built from the lessons</small></h1>
 <input id="q" type="search" placeholder="Search: index, merge, NaN, KeyError…" autocomplete="off">
 <nav>{''.join(nav)}</nav></div></header>
 <main class="wrap">{''.join(body)}<p id="none" class="hide">Nothing found. Try a shorter word.</p></main>
