@@ -1,4 +1,7 @@
-"""Render the notebook's 📘 blocks (Book.sections) as one static page: docs/cheatsheet.html (GitHub Pages)."""
+"""Render the notebook's 📘 blocks (Book.sections) as one static page: docs/cheatsheet.html (GitHub Pages).
+
+The page wears the Quaera family kit (docs/family/: Plex, --q-* neutrals, the header switcher), so the
+header below must stay in step with docs/index.html; the kit itself is laid out by quaera/scripts/family-sync.mjs."""
 import html
 import re
 
@@ -64,10 +67,12 @@ def md_to_html(md):
 
 
 CSS = """
-:root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e3e3e0;--code:#f0efe9;--accent:#2f6fde;--mark:#ffe58a}
-@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1d1d20;--ink:#ececee;--muted:#a0a0a8;--line:#2e2e33;--code:#2a2a2f;--accent:#7aa7ff;--mark:#6b5a12}}
+/* the family kit (family/tokens.css) gives the neutrals and the Pandas accent; this page only maps its names onto them */
+:root{--bg:var(--q-bg);--card:var(--q-surface);--ink:var(--q-text);--muted:var(--q-muted);--line:var(--q-line);--code:var(--q-surface-2);--accent:var(--q-accent);--mark:#ffe58a}
+@media (prefers-color-scheme:dark){:root{--mark:#6b5a12}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--q-font-sans)}
 header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px 10px}
 .wrap{max-width:980px;margin:0 auto}
 h1{font-size:18px;margin:0 0 8px}
@@ -124,12 +129,17 @@ def build_page(sections, part_titles):
             body.append(f"<section id='s{sid}'><h3><span>{sid}</span>{_inline(sec['title'])}</h3>\n"
                         f"{md_to_html(sec['md'])}</section>")
     return f"""<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pandas Cheat Sheet</title><style>{CSS}</style>
+<html lang="en" data-app="pandas" data-theme="system"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pandas Cheat Sheet</title>
+<link rel="stylesheet" href="family/fonts.css">
+<link rel="stylesheet" href="family/tokens.css">
+<link rel="icon" href="family/marks/pandas.svg" type="image/svg+xml">
+<script type="module" src="family/switcher.js"></script>
+<style>{CSS}</style>
 <!-- Cloudflare Web Analytics: cookieless page-view counts, on the live site only (not local runs). -->
 <script>if(location.hostname==='pandas.quaera.app'){{const s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.dataset.cfBeacon='{{"token": "23b9d946ef0b44c2ab4bb2da675d630b"}}';document.head.appendChild(s)}}</script>
 </head>
-<body><header><div class="wrap"><h1>📋 Quaera Pandas <small>· cheat sheet, built from the lessons</small></h1>
+<body><header><div class="wrap"><quaera-switcher app="pandas"></quaera-switcher><h1 style="margin-top:8px">Cheat sheet <small>· built from the lessons</small></h1>
 <input id="q" type="search" placeholder="Search: index, merge, NaN, KeyError…" autocomplete="off">
 <nav>{''.join(nav)}</nav></div></header>
 <main class="wrap">{''.join(body)}<p id="none" class="hide">Nothing found. Try a shorter word.</p></main>
