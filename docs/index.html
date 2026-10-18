@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en" data-app="pandas" data-theme="system"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Quaera Pandas</title>
 <meta name="description" content="One Colab notebook from the first df.head() to business analytics with pandas: 137 auto-checked tasks on an e-commerce dataset.">
 <meta property="og:title" content="Quaera Pandas">
@@ -11,18 +11,19 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The notebook's check() on a wrong answer, explaining why, and then on the right one">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="family/fonts.css">
+<link rel="stylesheet" href="family/tokens.css">
+<link rel="icon" href="family/marks/pandas.svg" type="image/svg+xml">
+<script type="module" src="family/switcher.js"></script>
 <style>
-:root{--bg:#f7f7f5;--dot:#d9d9d4;--card:#fff;--ink:#1d1d1f;--muted:#4a4a50;--faint:#5f5f66;--line:#e3e3e0;--code:#f0efe9;--cell:#f5f5f2;
---accent:#2f6fde;--on-accent:#fff;--hi:#eef3fd;--hi-line:#c9d8f6;--hi-ink:#24509e;
+/* the family kit (family/tokens.css) gives the neutrals and the Pandas accent; this page only maps its names onto them */
+:root{--bg:var(--q-bg);--dot:var(--q-line);--card:var(--q-surface);--ink:var(--q-text);--muted:var(--q-muted);--faint:var(--q-muted);--line:var(--q-line);--code:var(--q-surface-2);--cell:var(--q-surface-2);
+--accent:var(--q-accent);--on-accent:var(--q-accent-ink);--hi:color-mix(in srgb,var(--q-accent) 9%,var(--q-surface));--hi-line:color-mix(in srgb,var(--q-accent) 35%,var(--q-line));--hi-ink:var(--q-accent);
 --bad:#b3261e;--bad-bg:#fdf3f2;--tip:#7a4a00;--good:#1e7a3c;--good-bg:#f1f8f3;--shadow:rgba(20,20,30,.28)}
-@media (prefers-color-scheme:dark){:root{--bg:#141416;--dot:#2a2a2f;--card:#1d1d20;--ink:#ececee;--muted:#b4b4bc;--faint:#a0a0a8;--line:#2e2e33;--code:#2a2a2f;--cell:#25252a;
---accent:#7aa7ff;--on-accent:#0b1530;--hi:#1b2740;--hi-line:#2f4670;--hi-ink:#a9c4ff;
---bad:#ff8a80;--bad-bg:#2c1c1c;--tip:#f0c27a;--good:#7ad69a;--good-bg:#17281d;--shadow:rgba(0,0,0,.6)}}
+@media (prefers-color-scheme:dark){:root{--bad:#ff8a80;--bad-bg:#2c1c1c;--tip:#f0c27a;--good:#7ad69a;--good-bg:#17281d;--shadow:rgba(0,0,0,.6)}}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 body{margin:0;background-color:var(--bg);background-image:radial-gradient(var(--dot) 1px,transparent 1px);background-size:22px 22px;color:var(--ink);
 font:16px/1.55 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif}
 .wrap{max-width:1200px;margin:0 auto;padding:0 16px 56px}
@@ -30,7 +31,6 @@ code,pre{font-family:"IBM Plex Mono",ui-monospace,Consolas,monospace}
 code{font-size:.88em;background:var(--code);padding:1px 5px;border-radius:4px;overflow-wrap:anywhere}
 a{color:var(--accent)}
 nav{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;flex-wrap:wrap;padding:20px 0}
-.brand{display:flex;align-items:center;gap:10px;color:var(--ink);text-decoration:none;font-weight:600;font-size:17px}
 .links{display:flex;gap:20px;font-size:15px}
 .links a{color:var(--muted);text-decoration:none}
 .links a:hover{color:var(--ink);text-decoration:underline}
@@ -100,7 +100,7 @@ footer a{color:inherit}
 <body><div class="wrap">
 
 <nav>
-  <a class="brand" href="./"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--accent)" aria-hidden="true"><rect x="3" y="3" width="20" height="20" rx="4"/><path d="M3 10h20M10 10v13"/></svg>Quaera Pandas</a>
+  <quaera-switcher app="pandas"></quaera-switcher>
   <div class="links"><a href="#inside">What is inside</a><a href="cheatsheet.html">Cheat sheet</a><a href="https://github.com/StanislavSidorovich/pandas-analyst-path">GitHub</a></div>
 </nav>
 
@@ -190,7 +190,6 @@ check('1.10')</pre></div>
   Data: Google's public <code>thelook_ecommerce</code> dataset (synthetic, non-personal columns only).
   · <a href="https://github.com/StanislavSidorovich/pandas-analyst-path">Source on GitHub</a>
   · Practise SQL and pandas on the go in <a href="https://quaera.app">Quaera</a>
-  · Part of <a href="https://quaera.app">Quaera</a>: <a href="https://model.quaera.app">Model</a> (databases), <a href="https://flow.quaera.app">Flow</a> (BPMN), <a href="https://lab.quaera.app">Lab</a> (SQL on your files)
 </footer>
 
 </div>

@@ -1,10 +1,17 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Pandas Cheat Sheet</title><style>
-:root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1f;--muted:#6b6b70;--line:#e3e3e0;--code:#f0efe9;--accent:#2f6fde;--mark:#ffe58a}
-@media (prefers-color-scheme:dark){:root{--bg:#141416;--card:#1d1d20;--ink:#ececee;--muted:#a0a0a8;--line:#2e2e33;--code:#2a2a2f;--accent:#7aa7ff;--mark:#6b5a12}}
+<html lang="en" data-app="pandas" data-theme="system"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pandas Cheat Sheet</title>
+<link rel="stylesheet" href="family/fonts.css">
+<link rel="stylesheet" href="family/tokens.css">
+<link rel="icon" href="family/marks/pandas.svg" type="image/svg+xml">
+<script type="module" src="family/switcher.js"></script>
+<style>
+/* the family kit (family/tokens.css) gives the neutrals and the Pandas accent; this page only maps its names onto them */
+:root{--bg:var(--q-bg);--card:var(--q-surface);--ink:var(--q-text);--muted:var(--q-muted);--line:var(--q-line);--code:var(--q-surface-2);--accent:var(--q-accent);--mark:#ffe58a}
+@media (prefers-color-scheme:dark){:root{--mark:#6b5a12}}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--q-font-sans)}
 header{position:sticky;top:0;z-index:2;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px 10px}
 .wrap{max-width:980px;margin:0 auto}
 h1{font-size:18px;margin:0 0 8px}
@@ -31,7 +38,7 @@ mark{background:var(--mark);color:inherit}
 <!-- Cloudflare Web Analytics: cookieless page-view counts, on the live site only (not local runs). -->
 <script>if(location.hostname==='pandas.quaera.app'){const s=document.createElement('script');s.defer=true;s.src='https://static.cloudflareinsights.com/beacon.min.js';s.dataset.cfBeacon='{"token": "23b9d946ef0b44c2ab4bb2da675d630b"}';document.head.appendChild(s)}</script>
 </head>
-<body><header><div class="wrap"><h1>📋 Quaera Pandas <small>· cheat sheet, built from the lessons</small></h1>
+<body><header><div class="wrap"><quaera-switcher app="pandas"></quaera-switcher><h1 style="margin-top:8px">Cheat sheet <small>· built from the lessons</small></h1>
 <input id="q" type="search" placeholder="Search: index, merge, NaN, KeyError…" autocomplete="off">
 <nav><a href='#part1'>1</a><a href='#part2'>2</a><a href='#part3'>3</a><a href='#part4'>4</a><a href='#part5'>5</a><a href='#part6'>6</a><a href='#part7'>7</a><a href='#part8'>8</a><a href='#part9'>9</a><a href='#part10'>10</a><a href='#part12'>12</a><a href='#appendix'>Cheat sheet · errors · glossary</a></nav></div></header>
 <main class="wrap"><h2 id='part1'>Part 1 · Meet the data · Week 1, Monday</h2><section id='s1.1'><h3><span>1.1</span>Anatomy of a DataFrame</h3>

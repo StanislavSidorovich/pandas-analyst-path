@@ -44,6 +44,8 @@ To use the live BigQuery data instead, set `DATA_SOURCE = "bigquery"` and your `
 Pandas_Analyst_Path.ipynb   the notebook (generated, don't edit by hand)
 data/                       snapshot of thelook_ecommerce (through 2026-09-30) + the messy CRM CSV for Part 5
 data/tasks.payload          tasks, hints and solutions (generated; the Setup cell downloads it)
+docs/                       GitHub Pages: the landing page, the cheat sheet, and family/ (the Quaera family kit)
+scripts/check_family.py     checks docs/family against its MANIFEST.json
 tools/
   extract_snapshot.py       BigQuery → data/*.parquet (the same SQL the notebook uses in bigquery mode)
   make_crm.py               generates the deliberately messy CSV
@@ -54,6 +56,10 @@ tools/
 ```
 
 Rebuild after editing content: `python tools/build_notebook.py && python tools/test_notebook.py`
+
+`docs/family/` is a copy of the Quaera family kit (fonts, colours, header switcher). Do not edit it by hand: the source
+is `quaera/family/` in the Quaera folder. Refresh it with `node quaera/scripts/family-sync.mjs --only pandas`, then check
+the copy with `python scripts/check_family.py` (exit code 1 means a file differs from `MANIFEST.json`).
 
 The Setup cell loads `tools/engine.py` and `data/tasks.payload` from the git tag in `ASSET_REF`
 (build_notebook.py), so saved copies keep matching files. After changing content or the engine:
